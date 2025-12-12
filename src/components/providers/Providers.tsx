@@ -6,18 +6,13 @@ import { isEvmType } from '@/core-ui/helpers';
 import { getNetworks } from '@/core-ui/hooks';
 import { useResize } from '@/core-ui/stores';
 import { useVisibility } from '@/core-ui/stores/visibility';
-import { config as wagmiConfig } from '@/networks/evm/config';
 import { initPosthog } from '@/posthog';
 import { HeroUIProvider } from '@heroui/react';
 import { ToastProvider } from '@heroui/toast';
-import { PrivyProvider } from '@privy-io/react-auth';
-import { WagmiProvider } from '@privy-io/wagmi';
 import { QueryClient, QueryClientProvider, useQueryClient } from '@tanstack/react-query';
 import * as Ably from 'ably';
 import { ChannelProvider, useChannel } from 'ably/react';
 import { ReactNode, useEffect, useState } from 'react';
-import { base } from 'viem/chains';
-import { PrivyProviderSync } from './PrivyProviderSync';
 import { TransactionsProvider } from './TransactionsProvider';
 
 export const queryClient = new QueryClient();
@@ -129,18 +124,10 @@ const Main = ({ children }: { children: ReactNode }) => {
     >
       <>
         {isEVM.is ? (
-          <PrivyProvider
-            appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID!}
-            config={{ loginMethods: ['wallet', 'email'], defaultChain: base, supportedChains: [base] }}
-          >
-            <QueryClientProvider client={queryClient}>
-              <WagmiProvider config={wagmiConfig}>
-                <PrivyProviderSync />
-                <NetworksProvider>{children}</NetworksProvider>
-              </WagmiProvider>
-              <AblyChanges />
-            </QueryClientProvider>
-          </PrivyProvider>
+          <QueryClientProvider client={queryClient}>
+            <NetworksProvider>{children}</NetworksProvider>
+            <AblyChanges />
+          </QueryClientProvider>
         ) : (
           <QueryClientProvider client={queryClient}>
             <NetworksProvider>{children}</NetworksProvider>

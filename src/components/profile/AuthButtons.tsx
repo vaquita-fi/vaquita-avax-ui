@@ -6,7 +6,7 @@ import { useNetworks } from '@/core-ui/hooks';
 import { useNetworkConfigStore } from '@/core-ui/stores';
 import { isDummyNetwork } from '@/networks/dummy';
 import { isEvmTypeNetwork } from '@/networks/evm';
-import PrivyAuthButtons from './PrivyButtons';
+import { ThirdwebButtons } from './ThirdwebButtons';
 
 export const AuthButtons = () => {
   const { network } = useNetworkConfigStore();
@@ -20,7 +20,7 @@ export const AuthButtons = () => {
     <div className="absolute top-0 left-0 right-0">
       <div className="flex justify-end gap-1 w-full">
         <NetworkSelector />
-        {network && (isEvmType(types).isUnique || isEvmTypeNetwork(network.name)) && <PrivyAuthButtons />}
+        {network && (isEvmType(types).isUnique || isEvmTypeNetwork(network.name)) && <ThirdwebButtons />}
         {isDummyNetwork() && <DummyAuthButtons />}
       </div>
     </div>

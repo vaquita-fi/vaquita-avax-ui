@@ -1,5 +1,5 @@
-import { isBaseNetwork, isBaseSepoliaTestnetNetwork } from '@/networks/base';
+import { isAvalancheNetwork } from '../avalanche/helpers';
 
 export const isEvmTypeNetwork = (networkName: string) => {
-  return isBaseSepoliaTestnetNetwork(networkName) || isBaseNetwork(networkName);
+  return isAvalancheNetwork(networkName);
 };

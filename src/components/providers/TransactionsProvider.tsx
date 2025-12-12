@@ -2,8 +2,6 @@
 
 import { useNetworkConfigStore, useTransactionStore } from '@/core-ui/stores';
 import { DepositFn, DepositFunction, WithdrawFn, WithdrawFunction } from '@/core-ui/types';
-import { isBaseNetwork, isBaseSepoliaTestnetNetwork } from '@/networks/base';
-import { baseTransactions } from '@/networks/base/baseTransactions';
 // import { coreTransactions } from '@/networks/core/coreTransactions';
 // import { scrollTransactions } from '@/networks/scroll/scrollTransactions';
 import { isDummyNetwork } from '@/networks/dummy';
@@ -20,16 +18,10 @@ export function TransactionsProvider() {
         let transactions: { transactionDeposit: DepositFn; transactionWithdraw: WithdrawFn };
         if (isDummyNetwork()) {
           transactions = dummyTransactions();
-        } else if (network && token && (isBaseSepoliaTestnetNetwork(networkName) || isBaseNetwork(networkName))) {
-          transactions = await baseTransactions(network, token);
         } else {
           setTransactions(null, null);
           // return reset();
         }
-        // } else if (isCoreNetwork(networkName)) {
-        // transactions = await coreTransactions();
-        // } else if (token && isScrollNetwork(networkName)) {
-        //   transactions = await scrollTransactions(token);
 
         const transactionDeposit: DepositFunction = async (id, amount, lockPeriod) => {
           const log: Parameters<DepositFn>[3] = (...props) => {
