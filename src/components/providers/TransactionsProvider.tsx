@@ -8,10 +8,6 @@ import { baseTransactions } from '@/networks/base/baseTransactions';
 // import { scrollTransactions } from '@/networks/scroll/scrollTransactions';
 import { isDummyNetwork } from '@/networks/dummy';
 import { dummyTransactions } from '@/networks/dummy/dummyTransactions';
-import { isLiskNetwork } from '@/networks/lisk';
-import { liskTransactions } from '@/networks/lisk/liskTransactions';
-import { isStellarNetwork } from '@/networks/stellar';
-import { stellarTransactions } from '@/networks/stellar/stellarTransactions';
 import { useEffect } from 'react';
 
 export function TransactionsProvider() {
@@ -24,10 +20,6 @@ export function TransactionsProvider() {
         let transactions: { transactionDeposit: DepositFn; transactionWithdraw: WithdrawFn };
         if (isDummyNetwork()) {
           transactions = dummyTransactions();
-        } else if (token && isStellarNetwork(networkName)) {
-          transactions = await stellarTransactions(token);
-        } else if (token && isLiskNetwork(networkName)) {
-          transactions = await liskTransactions(token);
         } else if (network && token && (isBaseSepoliaTestnetNetwork(networkName) || isBaseNetwork(networkName))) {
           transactions = await baseTransactions(network, token);
         } else {
