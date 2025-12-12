@@ -2,7 +2,6 @@
 
 import { DesktopSidebar, MobileNavigation } from '@/components';
 import { AblyProvider, NetworksProvider, sendLogToAbly } from '@/core-ui/components';
-import { isEvmType } from '@/core-ui/helpers';
 import { getNetworks } from '@/core-ui/hooks';
 import { useResize } from '@/core-ui/stores';
 import { useVisibility } from '@/core-ui/stores/visibility';
@@ -13,6 +12,7 @@ import { QueryClient, QueryClientProvider, useQueryClient } from '@tanstack/reac
 import * as Ably from 'ably';
 import { ChannelProvider, useChannel } from 'ably/react';
 import { ReactNode, useEffect, useState } from 'react';
+import { ThirdwebProvider } from 'thirdweb/react';
 import { TransactionsProvider } from './TransactionsProvider';
 
 export const queryClient = new QueryClient();
@@ -113,7 +113,7 @@ const Main = ({ children }: { children: ReactNode }) => {
     };
     void fun();
   }, []);
-  const isEVM = isEvmType(types);
+
   if (types.length === 0) return null;
 
   return (
@@ -122,19 +122,12 @@ const Main = ({ children }: { children: ReactNode }) => {
       style={{ height: 'var(--100VH)', minHeight: 'var(--100VH)', maxHeight: 'var(--100VH)', overflow: 'hidden' }}
       key={types.join(',')}
     >
-      <>
-        {isEVM.is ? (
-          <QueryClientProvider client={queryClient}>
-            <NetworksProvider>{children}</NetworksProvider>
-            <AblyChanges />
-          </QueryClientProvider>
-        ) : (
-          <QueryClientProvider client={queryClient}>
-            <NetworksProvider>{children}</NetworksProvider>
-            <AblyChanges />
-          </QueryClientProvider>
-        )}
-      </>
+      <QueryClientProvider client={queryClient}>
+        <NetworksProvider>
+          <ThirdwebProvider>{children}</ThirdwebProvider>
+        </NetworksProvider>
+        <AblyChanges />
+      </QueryClientProvider>
     </main>
   );
 };
