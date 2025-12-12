@@ -1,6 +1,7 @@
 'use client';
 
 import { DesktopSidebar, MobileNavigation } from '@/components';
+import { ThirdwebSync } from '@/components/providers/ThirdwebSync';
 import { AblyProvider, NetworksProvider, sendLogToAbly } from '@/core-ui/components';
 import { getNetworks } from '@/core-ui/hooks';
 import { useResize } from '@/core-ui/stores';
@@ -124,7 +125,10 @@ const Main = ({ children }: { children: ReactNode }) => {
     >
       <QueryClientProvider client={queryClient}>
         <NetworksProvider>
-          <ThirdwebProvider>{children}</ThirdwebProvider>
+          <ThirdwebProvider>
+            {children}
+            <ThirdwebSync />
+          </ThirdwebProvider>
         </NetworksProvider>
         <AblyChanges />
       </QueryClientProvider>
